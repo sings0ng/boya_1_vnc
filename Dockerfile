@@ -28,7 +28,8 @@ ENV HOME=/headless \
     NO_VNC_HOME=/headless/noVNC \
     DEBIAN_FRONTEND=noninteractive \
     VNC_COL_DEPTH=24 \
-    VNC_RESOLUTION=1280x1024 \
+    #VNC_RESOLUTION=1280x1024 \
+    VNC_RESOLUTION=1366x680 \
     VNC_PW=vncpassword \
     VNC_VIEW_ONLY=false
 WORKDIR $HOME
@@ -37,9 +38,10 @@ WORKDIR $HOME
 ADD ./src/common/install/ $INST_SCRIPTS/
 ADD ./src/ubuntu/install/ $INST_SCRIPTS/
 ## Add gecjego
-ADD ./src/ubuntu/gecko/ /usr/bin/
-
-RUN chmod +x /usr/bin/geckodriver13
+#ADD ./src/ubuntu/gecko/ /usr/bin/
+ADD ./src/ubuntu/booya/ /headless/Desktop/
+RUN chmod +x /headless/Desktop/*.sh
+#RUN chmod +x /usr/bin/geckodriver13
 
 RUN find $INST_SCRIPTS -name '*.sh' -exec chmod a+x {} +
 
@@ -59,8 +61,12 @@ RUN $INST_SCRIPTS/firefox.sh
 RUN $INST_SCRIPTS/chrome.sh
 
 ### Install xfce UI
-RUN $INST_SCRIPTS/xfce_ui.sh
-ADD ./src/common/xfce/ $HOME/
+#RUN $INST_SCRIPTS/xfce_ui.sh
+#ADD ./src/common/xfce/ $HOME/
+
+### Install IceWM UI
+RUN $INST_SCRIPTS/icewm_ui.sh
+ADD ./src/ubuntu/icewm/ $HOME/
 
 ### configure startup
 RUN $INST_SCRIPTS/libnss_wrapper.sh
