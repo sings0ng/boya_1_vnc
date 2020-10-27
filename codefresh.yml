@@ -1,36 +1,27 @@
-version: '3'
-stages:
-  - prepare
-  - package
-  - launch
+version: '1.0'
 steps:
-    main_clone:
-      title: 'Cloning main repository...'
-      type: git-clone
-      repo: sings0ng/boya_1_vnc
-      revision: 'master'
-      git: github
-      stage: prepare
-    build_image:
-      title: Building Image
-      type: build
-      #Important: rename this image to to a valid repository in your registry. For example: myUserName/vote
-      image_name: example-launch-compose
-      #Dockerfile location should be relative to the working directory
-      dockerfile: Dockerfile
-      tag: master
-      stage: package
-    launch_composition:
-      title: Launch Composition
-      type: launch-composition
-      composition:
+  build_step:
+    type: build
+    image_name: my-node-app
+    dockerfile: Dockerfile
+    tag: ${{CF_BRANCH}}
+  my_db_tests:
+    type: composition
+    composition:
         version: '2'
         services:
-          app:
-            image: example-launch-compose:master
+          db:
+            image: mysql:latest
             ports:
-            - 6901
-      environment_name: 'cf-example-launch-composition'
-      entry_point: app
-      fail_fast: false
-      stage: launch 
+              - 3306
+            environment:
+              MYSQL_ROOT_PASSWORD: admin
+              MYSQL_USER: my_user
+              MYSQL_PASSWORD: admin
+              MYSQL_DATABASE: nodejs
+    composition_candidates:
+        test:
+          image: ${{build_step}}
+          links:
+            - db
+          command: bash -c 'sleep 30 && MYSQL_ROOT_PASSWORD=admin MYSQL_USER=my_user MYSQL_HOST=db MYSQL_PASSWORD=admin MYSQL_DATABASE=nodejs npm test'
