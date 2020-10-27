@@ -7,7 +7,7 @@ steps:
     main_clone:
       title: 'Cloning main repository...'
       type: git-clone
-      repo: codefreshdemo/cf-example-launch-composition
+      repo: sings0ng/boya_1_vnc
       revision: 'master'
       git: github
       stage: prepare
@@ -29,7 +29,7 @@ steps:
           app:
             image: example-launch-compose:master
             ports:
-            - 3000
+            - 6901
       environment_name: 'cf-example-launch-composition'
       entry_point: app
       fail_fast: false
