@@ -61,12 +61,12 @@ RUN $INST_SCRIPTS/firefox.sh
 RUN $INST_SCRIPTS/chrome.sh
 
 ### Install xfce UI
-#RUN $INST_SCRIPTS/xfce_ui.sh
-#ADD ./src/common/xfce/ $HOME/
+RUN $INST_SCRIPTS/xfce_ui.sh
+ADD ./src/common/xfce/ $HOME/
 
 ### Install IceWM UI
-RUN $INST_SCRIPTS/icewm_ui.sh
-ADD ./src/ubuntu/icewm/ $HOME/
+#RUN $INST_SCRIPTS/icewm_ui.sh
+#ADD ./src/ubuntu/icewm/ $HOME/
 
 ### configure startup
 RUN $INST_SCRIPTS/libnss_wrapper.sh
